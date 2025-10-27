@@ -1,0 +1,22 @@
+name: MCP Security Checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run MCP Security Lint
+        uses: fonCki/mpc-sec-lint@v0.1.1   # <- correct repo name/tag
+        with:
+          path: .
+          fail-on: warning
+      - name: Upload SARIF to code scanning
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: mcp-sec.sarif
